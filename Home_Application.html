@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AzurePeak Applications</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 10px #000;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #0097a7;
+    }
+    .container {
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #1e2b35;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .sidebar button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .main {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    textarea {
+      height: 100px;
+    }
+    .form-section {
+      display: none;
+    }
+    .visible {
+      display: block !important;
+    }
+    .login-box {
+      width: 400px;
+      background: #1e2b35;
+      padding: 30px;
+      margin: 60px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AzurePeak Application System</h1>
+    <span id="userInfo"></span><button class="btn" id="loginBtn" onclick="showLogin()">Login</button>
+  </header>
+
+  <div id="loginSection" class="login-box" style="display:none">
+    <h2>Login</h2>
+    <div class="form-group">
+      <label>Discord Name</label>
+      <input type="text" id="discordName" />
+    </div>
+    <div class="form-group">
+      <label>Game Name</label>
+      <input type="text" id="gameName" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" />
+    </div>
+    <button class="btn" onclick="submitLogin()">Submit</button>
+  </div>
+
+  <div class="container" id="appSection" style="display:none">
+    <div class="sidebar">
+      <button class="btn" onclick="showForm('ar')">Staff Application - AR</button>
+      <button class="btn" onclick="showForm('eng')">Staff Application - ENG</button>
+      <button class="btn" onclick="showForm('media')">Media Application</button>
+    </div>
+    $1
+        <div style="margin-bottom: 30px; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 10px;">
+          <h2>📌 About AzurePeak Server</h2>
+          <p>Welcome to the official application portal of <strong>AzurePeak</strong>, one of the leading and most advanced Minecraft communities in the Arabic gaming world. Whether you are applying to be a staff member or a content creator, this site allows you to begin your journey!</p>
+          <ul>
+            <li>🛠️ <strong>Launched:</strong> January 2024, with the goal of building a safe, inclusive, and exciting place for players from all over the region.</li>
+            <li>🎮 <strong>Game Modes:</strong> Survival, Roleplay, Minigames, Events, and more constantly being updated and improved based on community feedback.</li>
+            <li>👨‍👩‍👧‍👦 <strong>Community:</strong> Over 10,000 players have joined our Discord and server — with daily active members and streamers contributing to a vibrant atmosphere.</li>
+            <li>🔧 <strong>Staff Team:</strong> A professional team operating 24/7 to moderate, build, and support the entire experience. We are always looking for serious, skilled, and dedicated individuals to help us grow.</li>
+            <li>🎥 <strong>Media Program:</strong> Are you a content creator? Do you make YouTube or TikTok videos? You might be eligible to join our media team and earn special perks and recognition!</li>
+            <li>📢 <strong>Applications:</strong> You can apply to become a staff member or a media creator from the left menu. Each form is reviewed carefully and you will receive feedback based on your answers.</li>
+            <li>💡 <strong>Innovation:</strong> We use advanced plugins, custom builds, and AI moderation tools to ensure a modern and smooth gaming experience for all players.</li>
+            <li>🌍 <strong>Language Support:</strong> Our community supports both Arabic and English speakers, and we welcome all backgrounds.</li>
+          </ul>
+          <p>اختر نوع التقديم من القائمة الجانبية وابدأ رحلتك معنا!</p>
+        </div>
+      <div id="formContainer"></div>
+      <div id="statusContainer" style="margin-top:20px;font-weight:bold;"></div>
+    </div>
+  </div>
+
+  <script>
+    function showLogin() {
+      document.getElementById('loginSection').style.display = 'block';
+    }
+
+    function submitLogin() {
+      const discordName = document.getElementById('discordName').value;
+      const gameName = document.getElementById('gameName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!discordName || !gameName || !email || !password) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      localStorage.setItem('userDiscord', discordName);
+      document.getElementById('loginSection').style.display = 'none';
+      document.getElementById('appSection').style.display = 'flex';
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('userInfo').innerText = discordName;
+    }
+
+    function showForm(type) {
+      const formContainer = document.getElementById('formContainer');
+      let content = '';
+      if (type === 'ar' || type === 'eng') {
+        const isAR = type === 'ar';
+        const t = (ar, en) => isAR ? ar : en;
+        content += `<h2>${t('تقديم الإدارة', 'Staff Application')}</h2>`;
+        const questions = [
+          t('لماذا تريد الانضمام للإدارة؟', 'Why do you want to join the staff?'),
+          t('ما الخبرات السابقة التي تمتلكها؟', 'What previous experience do you have?'),
+          t('هل سبق لك العمل بإدارة سيرفر؟', 'Have you worked as server staff before?'),
+          t('ما هي مهاراتك الأساسية؟', 'What are your core skills?'),
+          t('كم عدد الساعات المتاحة لك في الأسبوع؟', 'How many hours per week can you commit?'),
+          t('هل يمكنك التعاون مع فريق؟', 'Can you work with a team?'),
+          t('هل تتقن اللغة الإنجليزية؟', 'Do you speak English fluently?'),
+          t('متى تكون متاح عادة؟', 'When are you usually available?'),
+          t('كيف ستتعامل مع اللاعبين المخالفين؟', 'How would you deal with misbehaving players?'),
+          t('ما سبب اختيارنا لك؟', 'Why should we choose you?'),
+          t('هل لديك معرفة بأنظمة البان والتحذيرات؟', 'Do you know how ban/warning systems work?'),
+          t('هل سبق لك استخدام أي أدوات إدارة؟ مثل LuckPerms، CoreProtect، وغيرها؟', 'Have you used admin tools like LuckPerms, CoreProtect, etc.?'),
+          t('هل لديك معرفة بأساسيات قواعد اللعب؟', 'Do you understand the basic server rules?'),
+          t('هل تستطيع التعامل مع الحالات الحساسة مثل النزاعات بين اللاعبين؟', 'Can you handle sensitive cases like player disputes?'),
+          t('هل ستقوم بالترويج للسيرفر؟ وكيف؟', 'Will you promote the server? How?'),
+          t('هل سبق وتم تحذيرك أو حظرك في سيرفر آخر؟ ولماذا؟', 'Have you ever been warned or banned in another server? Why?'),
+          t('هل لديك معرفة بالـ Discord bots؟ اذكرها.', 'Do you have knowledge of Discord bots? Mention them.'),
+          t('هل تستطيع التواصل مع اللاعبين بشكل لبق؟', 'Can you communicate with players politely?'),
+          t('هل أنت مستعد للعمل تحت الضغط؟', 'Are you ready to work under pressure?'),
+          t('أي شيء إضافي تحب إضافته؟', 'Any extra info you would like to add?')
+        ];
+        content += `<div id='qaContainer'>`;
+        questions.forEach((q, i) => {
+          content += `<div class='form-group'><label>${q}</label><textarea id='q${i}'></textarea></div>`;
+        });
+        content += `</div><button class="btn" onclick="submitApplication('${type}')">${t('إرسال', 'Submit')}</button>`;
+      } else {
+        content += `<h2>Media Application</h2>`;
+        content += `
+          <div class='form-group'><label>Discord Name</label><input id='mediaDiscord' type='text'></div>
+          <div class='form-group'><label>Game Name</label><input id='mediaGame' type='text'></div>
+          <div class='form-group'><label>Video Link</label><input id='mediaLink' type='url'></div>
+          <button class="btn" onclick="submitApplication('media')">Submit</button>`;
+      }
+      formContainer.innerHTML = content;
+      document.getElementById('statusContainer').innerText = '';
+    }
+
+    function submitApplication(type) {
+      const status = document.getElementById('statusContainer');
+      status.innerText = '';
+
+      if (type === 'ar' || type === 'eng') {
+        const isAR = type === 'ar';
+        const t = (ar, en) => isAR ? ar : en;
+        const total = 20;
+        let empty = 0, bad = 0;
+        for (let i = 0; i < total; i++) {
+          const answer = document.getElementById(`q${i}`).value.trim();
+          if (answer === '') empty++;
+          else if (i === 1 || i === 2 || i === 3) {
+            if (answer.length < 15) bad++;
+          }
+        }
+
+        if (empty > 0) {
+          status.innerText = t('⚠️ الرجاء الإجابة على جميع الأسئلة قبل الإرسال.', '⚠️ Please answer all questions before submitting.');
+          return;
+        }
+
+        if (bad > 0) {
+          status.innerText = t('❌ للأسف تم رفضك، نرجو منك المحاولة مرة أخرى لاحقًا.', '❌ Unfortunately, you have been rejected. Better luck next time.');
+          return;
+        }
+
+        status.innerText = t('✅ تم قبولك في تقديم الإدارة. افتح تذكرة لكي تحصل على الرتبة.', '✅ You have been accepted in the Staff Application. Open a ticket to receive your rank.');
+      } else if (type === 'media') {
+        const name = document.getElementById('mediaDiscord').value.trim();
+        const game = document.getElementById('mediaGame').value.trim();
+        const link = document.getElementById('mediaLink').value.trim();
+        if (!name || !game || !link) {
+          status.innerText = '⚠️ Please fill in all fields.';
+          return;
+        }
+        status.innerText = '✅ تم قبولك في تقديم الميديا. افتح تذكرة لكي تحصل على الرتبة.';
+      }
+    }
+  window.onload = function() {
+      const user = localStorage.getItem('userDiscord');
+      if (user) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('appSection').style.display = 'flex';
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('userInfo').innerText = user;
+      }
+    };
+  </script>
+</body>
+</html>
